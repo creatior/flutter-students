@@ -34,15 +34,15 @@ class AuthRemoteSource {
     }
   }
 
-  Future<RefreshRequestModel> refresh(String accessToken) async {
+  Future<AuthResponseModel> refresh(RefreshRequestModel request) async {
     final response = await http.post(
       Uri.parse('$baseUrl$authRefreshUrl/'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'access_token': accessToken}),
+      body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
-      return RefreshRequestModel.fromJson(body);
+      return AuthResponseModel.fromJson(body);
     } else {
       throw ServerFailure.fromResponse(response.body);
     }
