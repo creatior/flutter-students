@@ -35,7 +35,7 @@ class StudentRemoteSource {
       }
     } on http.ClientException {
       throw const NetworkFailure('Failed to connect to server');
-    } on ServerFailure catch (e) {
+    } on ServerFailure {
       rethrow;
     } catch (e) {
       throw UnknownFailure(e.toString());

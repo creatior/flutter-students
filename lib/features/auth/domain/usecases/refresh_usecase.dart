@@ -5,7 +5,7 @@ import 'package:students_list/res/failures/failure.dart';
 
 class RefreshUsecase {
   final AuthRepository repository;
-  RefreshUsecase(this.repository);
+  RefreshUsecase({required this.repository});
 
   Future<Either<Failure, AuthTokens>> execute() async {
     return await repository.refresh();

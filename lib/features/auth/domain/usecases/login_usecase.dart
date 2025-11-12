@@ -5,7 +5,7 @@ import 'package:students_list/res/failures/failure.dart';
 
 class LoginUsecase {
   final AuthRepository repository;
-  LoginUsecase(this.repository);
+  LoginUsecase({required this.repository});
 
   Future<Either<Failure, AuthTokens>> execute(
     String username,

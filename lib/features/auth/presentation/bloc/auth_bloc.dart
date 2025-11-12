@@ -41,9 +41,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRefreshEvent>((event, emit) async {
       try {
         final result = await refreshUsecase.execute();
-        result.fold((_) {
-          emit(AuthLoggedOut());
-        }, (tokens) {});
+        result.fold(
+          (_) {
+            emit(AuthLoggedOut());
+          },
+          (tokens) {
+            emit(AuthLoginSuccess(tokens));
+          },
+        );
       } catch (_) {
         emit(AuthLoggedOut());
       }
