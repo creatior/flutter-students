@@ -7,8 +7,11 @@ import 'package:students_list/features/auth/domain/usecases/login_usecase.dart';
 import 'package:students_list/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:students_list/features/auth/domain/usecases/refresh_usecase.dart';
 import 'package:students_list/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:students_list/features/students/data/repositories/student_repository_impl.dart';
 import 'package:students_list/features/students/data/sources/student_local_source.dart';
 import 'package:students_list/features/students/data/sources/student_remote_source.dart';
+import 'package:students_list/features/students/domain/usecases/student_get_usecase.dart';
+import 'package:students_list/features/students/presentation/blocs/student_bloc.dart';
 
 final GetIt di = GetIt.instance;
 
@@ -50,4 +53,16 @@ Future<void> setupDi() async {
     () => StudentLocalSource(sharedPreferences),
   );
   di.registerLazySingleton<StudentRemoteSource>(() => StudentRemoteSource());
+  di.registerLazySingleton<StudentRepositoryImpl>(
+    () => StudentRepositoryImpl(
+      localSource: di<StudentLocalSource>(),
+      remoteSource: di<StudentRemoteSource>(),
+    ),
+  );
+  di.registerLazySingleton<StudentGetUsecase>(
+    () => StudentGetUsecase(repository: di<StudentRepositoryImpl>()),
+  );
+  di.registerLazySingleton<StudentBloc>(
+    () => StudentBloc(studentGetUsecase: di<StudentGetUsecase>()),
+  );
 }

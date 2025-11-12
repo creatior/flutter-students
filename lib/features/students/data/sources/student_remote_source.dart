@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:students_list/config/base_url.dart';
 import 'package:students_list/features/students/data/dtos/student_filter_dto.dart';
 import 'package:students_list/features/students/data/models/student_model.dart';
@@ -22,13 +21,23 @@ class StudentRemoteSource {
         final body = jsonDecode(response.body);
 
         List<dynamic> studentsJson;
+
         if (body is List) {
+          // Если сразу массив
           studentsJson = body;
         } else if (body is Map && body.containsKey('data')) {
-          studentsJson = body['data'];
+          final data = body['data'];
+          if (data is List) {
+            studentsJson = data;
+          } else {
+            throw const ServerFailure(
+              'Invalid response format: "data" is not a list',
+            );
+          }
         } else {
           throw const ServerFailure('Invalid response format');
         }
+
         return studentsJson.map((json) => StudentModel.fromJson(json)).toList();
       } else {
         throw ServerFailure.fromResponse(response.body);
@@ -37,7 +46,10 @@ class StudentRemoteSource {
       throw const NetworkFailure('Failed to connect to server');
     } on ServerFailure {
       rethrow;
-    } catch (e) {
+    } catch (e, st) {
+      // Для дебага можно логировать стек
+      print('StudentRemoteSource error: $e');
+      print(st);
       throw UnknownFailure(e.toString());
     }
   }

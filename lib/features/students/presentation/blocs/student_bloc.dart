@@ -33,7 +33,6 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     try {
       _currentFilter = event.filter;
       _currentPage = event.page;
-
       final result = await studentGetUsecase.execute(
         StudentFilter(
           offset: _currentPage * pageSize,

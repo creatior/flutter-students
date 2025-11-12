@@ -6,14 +6,14 @@ class StudentFilterDto {
 
   StudentFilterDto(this.filter);
 
-  Map<String, dynamic> toQueryParameters() {
+  Map<String, dynamic>? toQueryParameters() {
     final params = <String, dynamic>{};
 
     if (filter.offset != null) {
-      params['offset'] = filter.offset;
+      params['offset'] = filter.offset.toString();
     }
     if (filter.limit != null) {
-      params['limit'] = filter.limit;
+      params['limit'] = filter.limit.toString();
     }
     if (filter.firstName?.isNotEmpty ?? false) {
       params['first_name'] = filter.firstName;
@@ -52,7 +52,6 @@ class StudentFilterDto {
     if (filter.gitValue?.isNotEmpty ?? false) {
       params['git_value'] = filter.gitValue;
     }
-
     return params;
   }
 }
