@@ -1,72 +1,56 @@
-import 'package:students_list/features/students/data/enums/field_state.dart';
+import 'package:students_list/features/students/common/enums/field_state.dart';
+import 'package:students_list/features/students/domain/entities/student_filter.dart';
 
 class StudentFilterDto {
-  final int? offset;
-  final int? limit;
-  final String? firstName;
-  final String? lastName;
-  final String? middleName;
+  final StudentFilter filter;
 
-  final FieldState? telegramState;
-  final String? telegramValue;
-  final FieldState? emailState;
-  final String? emailValue;
-  final FieldState? phoneNumberState;
-  final String? phoneNumberValue;
-  final FieldState? gitState;
-  final String? gitValue;
-
-  const StudentFilterDto({
-    this.offset,
-    this.limit,
-    this.firstName,
-    this.lastName,
-    this.middleName,
-    this.telegramState,
-    this.telegramValue,
-    this.emailState,
-    this.emailValue,
-    this.phoneNumberState,
-    this.phoneNumberValue,
-    this.gitState,
-    this.gitValue,
-  });
+  StudentFilterDto(this.filter);
 
   Map<String, dynamic> toQueryParameters() {
     final params = <String, dynamic>{};
 
-    if (offset != null) params['offset'] = offset;
-    if (limit != null) params['limit'] = limit;
-    if (firstName?.isNotEmpty ?? false) params['first_name'] = firstName;
-    if (lastName?.isNotEmpty ?? false) params['last_name'] = lastName;
-    if (middleName?.isNotEmpty ?? false) params['middle_name'] = middleName;
-
-    if (telegramState != null) {
-      params['telegram_state'] = telegramState!.apiValue;
+    if (filter.offset != null) {
+      params['offset'] = filter.offset;
     }
-    if (telegramValue?.isNotEmpty ?? false) {
-      params['telegram_value'] = telegramValue;
+    if (filter.limit != null) {
+      params['limit'] = filter.limit;
     }
-
-    if (emailState != null) {
-      params['email_state'] = emailState!.apiValue;
+    if (filter.firstName?.isNotEmpty ?? false) {
+      params['first_name'] = filter.firstName;
     }
-    if (emailValue?.isNotEmpty ?? false) {
-      params['email_value'] = emailValue;
+    if (filter.lastName?.isNotEmpty ?? false) {
+      params['last_name'] = filter.lastName;
+    }
+    if (filter.middleName?.isNotEmpty ?? false) {
+      params['middle_name'] = filter.middleName;
     }
 
-    if (phoneNumberState != null) {
-      params['phone_number_state'] = phoneNumberState!.apiValue;
+    if (filter.telegramState != null) {
+      params['telegram_state'] = filter.telegramState!.apiValue;
     }
-    if (phoneNumberValue?.isNotEmpty ?? false) {
-      params['phone_number_value'] = phoneNumberValue;
+    if (filter.telegramValue?.isNotEmpty ?? false) {
+      params['telegram_value'] = filter.telegramValue;
     }
 
-    if (gitState != null) {
-      params['git_state'] = gitState!.apiValue;
+    if (filter.emailState != null) {
+      params['email_state'] = filter.emailState!.apiValue;
     }
-    if (gitValue?.isNotEmpty ?? false) {
-      params['git_value'] = gitValue;
+    if (filter.emailValue?.isNotEmpty ?? false) {
+      params['email_value'] = filter.emailValue;
+    }
+
+    if (filter.phoneNumberState != null) {
+      params['phone_number_state'] = filter.phoneNumberState!.apiValue;
+    }
+    if (filter.phoneNumberValue?.isNotEmpty ?? false) {
+      params['phone_number_value'] = filter.phoneNumberValue;
+    }
+
+    if (filter.gitState != null) {
+      params['git_state'] = filter.gitState!.apiValue;
+    }
+    if (filter.gitValue?.isNotEmpty ?? false) {
+      params['git_value'] = filter.gitValue;
     }
 
     return params;

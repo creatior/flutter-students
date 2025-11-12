@@ -1,3 +1,5 @@
+import 'package:students_list/features/students/domain/entities/student.dart';
+
 class StudentModel {
   final String firstName;
   final String lastName;
@@ -6,12 +8,7 @@ class StudentModel {
   final String? phoneNumber;
   final String? telegram;
   final String? git;
-
-  String get fullName => [
-    firstName,
-    middleName,
-    lastName,
-  ].where((e) => e != null && e.isNotEmpty).join(' ');
+  final String fullName;
 
   StudentModel({
     required this.firstName,
@@ -21,6 +18,7 @@ class StudentModel {
     this.phoneNumber,
     this.telegram,
     this.git,
+    required this.fullName,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +30,7 @@ class StudentModel {
       phoneNumber: json['phone_number'],
       telegram: json['telegram'],
       git: json['git'],
+      fullName: json['full_name'],
     );
   }
 
@@ -43,5 +42,19 @@ class StudentModel {
     'phone_number': phoneNumber,
     'telegram': telegram,
     'git': git,
+    'full_name': fullName,
   };
+
+  Student toEntity() {
+    return Student(
+      firstName: firstName,
+      lastName: lastName,
+      fullName: fullName,
+      middleName: middleName,
+      email: email,
+      phoneNumber: phoneNumber,
+      telegram: telegram,
+      git: git,
+    );
+  }
 }
