@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:students_list/config/base_url.dart';
+import 'package:students_list/features/students/data/dtos/create_student_dto.dart';
 import 'package:students_list/features/students/data/dtos/student_filter_dto.dart';
 import 'package:students_list/features/students/data/models/student_model.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,6 @@ class StudentRemoteSource {
         List<dynamic> studentsJson;
 
         if (body is List) {
-          // Если сразу массив
           studentsJson = body;
         } else if (body is Map && body.containsKey('data')) {
           final data = body['data'];
@@ -46,10 +46,37 @@ class StudentRemoteSource {
       throw const NetworkFailure('Failed to connect to server');
     } on ServerFailure {
       rethrow;
-    } catch (e, st) {
-      // Для дебага можно логировать стек
-      print('StudentRemoteSource error: $e');
-      print(st);
+    } catch (e) {
+      throw UnknownFailure(e.toString());
+    }
+  }
+
+  Future<StudentModel> createStudent(
+    CreateStudentDto request,
+    String? token,
+  ) async {
+    final uri = Uri.parse('$baseUrl$studentsBaseUrl/');
+
+    try {
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(request.toJson),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final body = jsonDecode(response.body);
+        return StudentModel.fromJson(body);
+      } else {
+        throw ServerFailure.fromResponse(response.body);
+      }
+    } on http.ClientException {
+      throw const NetworkFailure('Failed to connect to server');
+    } on ServerFailure {
+      rethrow;
+    } catch (e) {
       throw UnknownFailure(e.toString());
     }
   }
