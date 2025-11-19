@@ -18,6 +18,10 @@ class StudentRemoteSource {
     );
 
     if (response.statusCode == 200) {
+      if (response.body.isEmpty || response.body == 'null') {
+        return [];
+      }
+
       final body = jsonDecode(response.body);
 
       List<dynamic> studentsJson;

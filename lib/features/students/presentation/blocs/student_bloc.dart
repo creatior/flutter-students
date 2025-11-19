@@ -42,7 +42,6 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     try {
       _currentFilter = event.filter;
       _currentPage = event.page;
-
       final countResult = await studentCountUsecase.execute(_currentFilter);
 
       int totalCount = 0;

@@ -42,7 +42,82 @@ class StudentsPage extends StatelessWidget {
           if (state is StudentLoading || state is StudentInitial) {
             body = const Center(child: CircularProgressIndicator());
           } else if (state is StudentEmpty) {
-            body = const Center(child: Text('No students found'));
+            final studentBloc = context.read<StudentBloc>();
+
+            body = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Students',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () =>
+                          _showAddStudentDialog(context, studentBloc),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add'),
+                    ),
+                    const SizedBox(width: 6),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (ctx) {
+                            return StudentFiltersDialog(
+                              currentFilter: state.filter,
+                              onApply: (filter) {
+                                studentBloc.add(
+                                  LoadStudentsEvent(filter: filter),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.filter_list),
+                      label: const Text('Filters'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('No students found'),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            studentBloc.add(
+                              LoadStudentsEvent(filter: state.filter),
+                            );
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
           } else if (state is StudentSuccess) {
             final students = state.students;
             final studentBloc = context.read<StudentBloc>();
@@ -112,13 +187,13 @@ class StudentsPage extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           columnSpacing: 32,
-                          headingRowColor: MaterialStateProperty.all(
+                          headingRowColor: WidgetStateProperty.all(
                             Colors.blueGrey.shade50,
                           ),
-                          dataRowColor: MaterialStateProperty.resolveWith((
+                          dataRowColor: WidgetStateProperty.resolveWith((
                             states,
                           ) {
-                            if (states.contains(MaterialState.hovered)) {
+                            if (states.contains(WidgetState.hovered)) {
                               return Colors.blueGrey.shade100;
                             }
                             return null;
@@ -213,7 +288,7 @@ class StudentsPage extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text('Добавить студента'),
+          title: const Text('Add student'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -231,7 +306,7 @@ class StudentsPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Отмена'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -260,7 +335,7 @@ class StudentsPage extends StatelessWidget {
                 studentBloc.add(StudentAddEvent(student));
                 Navigator.pop(context);
               },
-              child: const Text('Добавить'),
+              child: const Text('Add'),
             ),
           ],
         );
