@@ -35,3 +35,15 @@ class StudentEmpty extends StudentState {
   final StudentFilter filter;
   const StudentEmpty(this.filter);
 }
+
+class StudentCreateLoading extends StudentState {}
+
+class StudentCreateSuccess extends StudentState {
+  final Student student;
+  StudentCreateSuccess(this.student);
+}
+
+class StudentCreateError extends StudentState {
+  final String message;
+  StudentCreateError(this.message);
+}

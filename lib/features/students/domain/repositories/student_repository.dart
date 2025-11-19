@@ -5,5 +5,6 @@ import 'package:students_list/res/failures/failure.dart';
 
 abstract class StudentRepository {
   Future<Either<Failure, List<Student>>> getStudents(StudentFilter filter);
+  Future<Either<Failure, int>> getStudentsCount(StudentFilter filter);
   Future<Either<Failure, Student>> createStudent(Student student);
 }

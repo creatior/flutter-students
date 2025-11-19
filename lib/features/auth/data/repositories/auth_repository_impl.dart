@@ -22,6 +22,9 @@ class AuthRepositoryImpl implements AuthRepository {
       final response = await remoteSource.login(
         AuthRequestModel(username: username, password: password),
       );
+      await localSource.setToken('refresh_token', response.refreshToken);
+      await localSource.setToken('access_token', response.accessToken);
+
       return Right(
         AuthTokens(
           accessToken: response.accessToken,

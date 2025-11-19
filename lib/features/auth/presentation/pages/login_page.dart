@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget {
         },
         listener: (context, state) {
           if (state is AuthLoginSuccess) {
-            Navigator.pushReplacementNamed(context, '/students');
+            Navigator.pushReplacementNamed(context, '/main');
           } else if (state is AuthLoginFailure) {
             ScaffoldMessenger.of(
               context,

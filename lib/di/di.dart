@@ -10,6 +10,8 @@ import 'package:students_list/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:students_list/features/students/data/repositories/student_repository_impl.dart';
 import 'package:students_list/features/students/data/sources/student_local_source.dart';
 import 'package:students_list/features/students/data/sources/student_remote_source.dart';
+import 'package:students_list/features/students/domain/usecases/student_count_usecase.dart';
+import 'package:students_list/features/students/domain/usecases/student_create_usecase.dart';
 import 'package:students_list/features/students/domain/usecases/student_get_usecase.dart';
 import 'package:students_list/features/students/presentation/blocs/student_bloc.dart';
 
@@ -62,7 +64,17 @@ Future<void> setupDi() async {
   di.registerLazySingleton<StudentGetUsecase>(
     () => StudentGetUsecase(repository: di<StudentRepositoryImpl>()),
   );
+  di.registerLazySingleton<StudentCreateUsecase>(
+    () => StudentCreateUsecase(repository: di<StudentRepositoryImpl>()),
+  );
+  di.registerLazySingleton<StudentCountUsecase>(
+    () => StudentCountUsecase(repository: di<StudentRepositoryImpl>()),
+  );
   di.registerLazySingleton<StudentBloc>(
-    () => StudentBloc(studentGetUsecase: di<StudentGetUsecase>()),
+    () => StudentBloc(
+      studentGetUsecase: di<StudentGetUsecase>(),
+      studentCreateUsecase: di<StudentCreateUsecase>(),
+      studentCountUsecase: di<StudentCountUsecase>(),
+    ),
   );
 }

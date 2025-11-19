@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:students_list/di/di.dart';
 import 'package:students_list/features/auth/presentation/pages/login_page.dart';
 import 'package:students_list/features/auth/presentation/pages/splash_page.dart';
-import 'package:students_list/features/students/presentation/pages/students_page.dart';
+import 'package:students_list/features/common/presentation/pages/main_tab_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +50,7 @@ class StudentsListApp extends StatelessWidget {
       routes: {
         '/splash': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
-        '/students': (context) => const StudentsPage(),
+        '/main': (context) => const MainTabPage(),
       },
     );
   }

@@ -32,9 +32,24 @@ class StudentRepositoryImpl extends StudentRepository {
   }
 
   @override
+  Future<Either<Failure, int>> getStudentsCount(StudentFilter filter) async {
+    try {
+      final response = await remoteSource.getStudentsCount(
+        StudentFilterDto(filter),
+      );
+      return Right(response);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } catch (e) {
+      return Left(UnknownFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, Student>> createStudent(Student student) async {
     try {
       final token = await localSource.getToken('access_token');
+
       final response = await remoteSource.createStudent(
         CreateStudentDto.fromEntity(student),
         token,

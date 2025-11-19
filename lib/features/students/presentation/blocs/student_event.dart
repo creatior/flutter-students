@@ -26,3 +26,8 @@ class ChangePageEvent extends StudentEvent {
 class RefreshStudentsEvent extends StudentEvent {
   const RefreshStudentsEvent();
 }
+
+class StudentAddEvent extends StudentEvent {
+  final Student student;
+  StudentAddEvent(this.student);
+}
