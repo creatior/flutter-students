@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:students_list/features/students/domain/entities/create_student.dart';
 import 'package:students_list/features/students/domain/entities/student_filter.dart';
 import 'package:students_list/features/students/domain/entities/student.dart';
 import 'package:students_list/features/students/domain/usecases/student_count_usecase.dart';
@@ -69,22 +70,27 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
         ),
       );
 
-      result.fold((failure) => emit(StudentError(failure)), (students) {
-        _isLastPage = _currentPage * pageSize + students.length >= totalCount;
+      if (result.hasError() && result.students.isEmpty) {
+        emit(StudentError(result.failure!));
+        return;
+      }
 
-        if (students.isEmpty && _currentPage == 0) {
-          emit(StudentEmpty(_currentFilter));
-        } else {
-          emit(
-            StudentSuccess(
-              students: students,
-              currentPage: _currentPage,
-              filter: _currentFilter,
-              isLastPage: _isLastPage,
-            ),
-          );
-        }
-      });
+      _isLastPage =
+          _currentPage * pageSize + result.students.length >= totalCount;
+
+      if (result.students.isEmpty && _currentPage == 0) {
+        emit(StudentEmpty(_currentFilter));
+      } else {
+        emit(
+          StudentSuccess(
+            students: result.students,
+            currentPage: _currentPage,
+            filter: _currentFilter,
+            isLastPage: _isLastPage,
+            error: result.failure,
+          ),
+        );
+      }
     } catch (e) {
       emit(StudentError(UnknownFailure(e.toString())));
     }

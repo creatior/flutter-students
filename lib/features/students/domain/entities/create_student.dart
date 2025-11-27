@@ -1,5 +1,4 @@
-class Student {
-  final int id;
+class CreateStudent {
   final String firstName;
   final String lastName;
   final String? middleName;
@@ -9,8 +8,7 @@ class Student {
   final String? git;
   final String fullName;
 
-  Student({
-    required this.id,
+  CreateStudent({
     required this.firstName,
     required this.lastName,
     this.middleName,

@@ -1,4 +1,4 @@
-import 'package:students_list/features/students/domain/entities/student.dart';
+import 'package:students_list/features/students/domain/entities/create_student.dart';
 
 class CreateStudentDto {
   final String firstName;
@@ -19,7 +19,7 @@ class CreateStudentDto {
     this.git,
   });
 
-  factory CreateStudentDto.fromEntity(Student student) {
+  factory CreateStudentDto.fromEntity(CreateStudent student) {
     return CreateStudentDto(
       firstName: student.firstName,
       lastName: student.lastName,

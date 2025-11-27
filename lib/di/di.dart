@@ -7,7 +7,9 @@ import 'package:students_list/features/auth/domain/usecases/login_usecase.dart';
 import 'package:students_list/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:students_list/features/auth/domain/usecases/refresh_usecase.dart';
 import 'package:students_list/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:students_list/features/students/data/db/app_database.dart';
 import 'package:students_list/features/students/data/repositories/student_repository_impl.dart';
+import 'package:students_list/features/students/data/sources/student_db_source.dart';
 import 'package:students_list/features/students/data/sources/student_local_source.dart';
 import 'package:students_list/features/students/data/sources/student_remote_source.dart';
 import 'package:students_list/features/students/domain/usecases/student_count_usecase.dart';
@@ -55,10 +57,18 @@ Future<void> setupDi() async {
     () => StudentLocalSource(sharedPreferences),
   );
   di.registerLazySingleton<StudentRemoteSource>(() => StudentRemoteSource());
+
+  di.registerLazySingleton<AppDatabase>(() => AppDatabase());
+
+  di.registerLazySingleton<StudentDbSource>(
+    () => StudentDbSource(di<AppDatabase>()),
+  );
+
   di.registerLazySingleton<StudentRepositoryImpl>(
     () => StudentRepositoryImpl(
       localSource: di<StudentLocalSource>(),
       remoteSource: di<StudentRemoteSource>(),
+      dbSource: di<StudentDbSource>(),
     ),
   );
   di.registerLazySingleton<StudentGetUsecase>(

@@ -17,12 +17,14 @@ class StudentSuccess extends StudentState {
   final int currentPage;
   final StudentFilter filter;
   final bool isLastPage;
+  final Failure? error;
 
   const StudentSuccess({
     required this.students,
     required this.currentPage,
     required this.filter,
     this.isLastPage = false,
+    this.error,
   });
 }
 

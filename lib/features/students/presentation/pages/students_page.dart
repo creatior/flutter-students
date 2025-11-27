@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:students_list/di/di.dart';
+import 'package:students_list/features/students/domain/entities/create_student.dart';
 import 'package:students_list/features/students/domain/usecases/student_count_usecase.dart';
 import 'package:students_list/features/students/domain/usecases/student_get_usecase.dart';
 import 'package:students_list/features/students/domain/usecases/student_create_usecase.dart';
-import 'package:students_list/features/students/domain/entities/student.dart';
 import 'package:students_list/features/students/domain/entities/student_filter.dart';
 import 'package:students_list/features/students/presentation/blocs/student_bloc.dart';
 import 'package:students_list/features/students/presentation/pages/student_filters_dialog.dart';
@@ -33,6 +33,16 @@ class StudentsPage extends StatelessWidget {
           } else if (state is StudentCreateSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Student added successfully')),
+            );
+          } else if (state is StudentSuccess && state.error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Ошибка загрузки с сервера: ${state.error}. Загрузка кэша.',
+                ),
+                backgroundColor: Colors.orange,
+                duration: const Duration(seconds: 3),
+              ),
             );
           }
         },
@@ -310,7 +320,7 @@ class StudentsPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                final student = Student(
+                final student = CreateStudent(
                   firstName: _firstNameController.text.trim(),
                   lastName: _lastNameController.text.trim(),
                   middleName: _middleNameController.text.trim().isEmpty

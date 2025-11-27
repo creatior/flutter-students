@@ -1,6 +1,7 @@
 import 'package:students_list/features/students/domain/entities/student.dart';
 
 class StudentModel {
+  final int id;
   final String firstName;
   final String lastName;
   final String? middleName;
@@ -11,6 +12,7 @@ class StudentModel {
   final String fullName;
 
   StudentModel({
+    required this.id,
     required this.firstName,
     required this.lastName,
     this.middleName,
@@ -23,6 +25,7 @@ class StudentModel {
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
+      id: json['id'],
       firstName: json['first_name'] ?? '',
       lastName: json['last_name'] ?? '',
       middleName: json['middle_name'],
@@ -47,6 +50,7 @@ class StudentModel {
 
   Student toEntity() {
     return Student(
+      id: id,
       firstName: firstName,
       lastName: lastName,
       fullName: fullName,

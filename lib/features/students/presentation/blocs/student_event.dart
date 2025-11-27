@@ -28,6 +28,6 @@ class RefreshStudentsEvent extends StudentEvent {
 }
 
 class StudentAddEvent extends StudentEvent {
-  final Student student;
+  final CreateStudent student;
   StudentAddEvent(this.student);
 }

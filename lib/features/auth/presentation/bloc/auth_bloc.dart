@@ -40,14 +40,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<AuthRefreshEvent>((event, emit) async {
       try {
-        final result = await refreshUsecase.execute();
+        final result = await refreshUsecase.execute().timeout(
+          const Duration(seconds: 5),
+          onTimeout: () => throw Exception('Server timeout'),
+        );
         result.fold(
-          (_) {
-            emit(AuthLoggedOut());
-          },
-          (tokens) {
-            emit(AuthLoginSuccess(tokens));
-          },
+          (_) => emit(AuthLoggedOut()),
+          (tokens) => emit(AuthLoginSuccess(tokens)),
         );
       } catch (_) {
         emit(AuthLoggedOut());
